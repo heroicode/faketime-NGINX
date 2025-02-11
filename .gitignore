@@ -1,0 +1,36 @@
+# local options and secrets need to be kept out
+.env
+
+# IntelliJ family of IDEs can include some project-specific configs
+.idea/*
+!.idea/dictionaries/
+!.idea/sqldialects.xml
+*.iml
+*.ipr
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+# Local History for Visual Studio Code
+.history/
+# Built Visual Studio Code Extensions
+*.vsix
+
+*~
+*.o
+*.cache
+.deps
+.vscode
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# MacOS
+.DS_Store
+.Spotlight-V100
+.Trashes
+._*

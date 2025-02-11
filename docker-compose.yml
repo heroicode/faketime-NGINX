@@ -1,0 +1,28 @@
+name: nginx-faketime
+
+services:
+  nginx:
+    build:
+      dockerfile_inline: |
+        FROM nginx:alpine-slim
+        RUN apk update \
+          && apk add libfaketime \
+            coreutils `# /bin/date` \
+            curl `# self-contained test execution`
+        COPY ./entrypoint.sh /faketime-entrypoint.sh
+        CMD [ "nginx", "-g", "daemon off;" ]
+        # Repeating the CMD from the nginx image appears to be necessary,
+        # otherwise I would have left that part out.
+        ENTRYPOINT [ "/faketime-entrypoint.sh" ]
+    tty: true
+    environment:
+      LD_PRELOAD: /usr/lib/faketime/libfaketime.so.1
+      # Seems like Alpine doesn't do $LIB so we just use the full path
+      FAKETIME: "-1d"
+      # Exactly 1 day in the past is convenient so that's what we're testing
+      FAKETIME_DONT_RESET: 1
+      # Ensure consistent time reported by all processes
+    ports:
+      - "${NGINX_HTTP:-8080}:80"
+    volumes:
+      - ./test.sh:/test.sh
